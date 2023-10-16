@@ -110,11 +110,11 @@ impl ZellijPlugin for State {
         let tabs = Tabs::render(&self.tabs, current_mode, palette);
         let mut session = Session::render(session_name.as_deref(), current_mode, palette);
         let mut datetime = self.now.render(current_mode, palette);
-        let pad = Bg::render(2, self.mode_info.style.colors);
+        let pad = Bg::render(1, self.mode_info.style.colors);
 
         let mut blocks = Vec::with_capacity(cols);
 
-        let occupied = session.len + tabs.len + datetime.len + (pad.len * 2);
+        let occupied = mode.len + layout.len + session.len + tabs.len + datetime.len + pad.len;
 
         blocks.append(&mut mode.blocks);
         blocks.append(&mut layout.blocks);
@@ -126,52 +126,34 @@ impl ZellijPlugin for State {
                 palette,
             );
 
-            let parts_len = (mode.len + layout.len + pad.len, error.len, session.len + datetime.len + pad.len);
+            let parts_len = (
+                mode.len + layout.len + pad.len + error.len,
+                session.len + datetime.len,
+            );
 
             let spacer = Spacer::render(cols, parts_len, palette);
 
             (vec![error], spacer)
         } else {
-            let parts_len = (mode.len + layout.len + pad.len, tabs.len, session.len + datetime.len + pad.len);
+            let parts_len = (
+                mode.len + layout.len + pad.len + tabs.len,
+                session.len + datetime.len,
+            );
 
             let spacer = Spacer::render(cols, parts_len, palette);
 
             (tabs.blocks, spacer)
         };
 
+        blocks.append(&mut mid);
+
         match spacer {
-            Spacer {
-                left: Some(left),
-                right: Some(right),
-            } => {
-                blocks.push(left);
-                blocks.append(&mut mid);
-                blocks.push(right);
+            Spacer { space: Some(space) } => {
+                blocks.push(space);
             }
-            Spacer {
-                left: Some(left),
-                right: None,
-            } => {
-                blocks.push(left);
-                blocks.append(&mut mid);
-            }
-            Spacer {
-                left: None,
-                right: Some(right),
-            } => {
-                blocks.append(&mut mid);
-                blocks.push(right);
-            }
-            Spacer {
-                left: None,
-                right: None,
-            } => {
-                // come what may
-                blocks.append(&mut mid);
-            }
+            Spacer { space: None } => {}
         }
 
-        blocks.push(pad);
         blocks.append(&mut session.blocks);
         blocks.append(&mut datetime.blocks);
 

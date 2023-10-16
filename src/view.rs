@@ -31,55 +31,25 @@ impl Bg {
 }
 
 pub struct Spacer {
-    pub left: Option<Block>,
-    pub right: Option<Block>,
+    pub space: Option<Block>,
 }
 
 impl Spacer {
     pub fn render(
         total_len: usize,
-        (left_len, mid_len, right_len): (usize, usize, usize),
+        (left_len, right_len): (usize, usize),
         palette: Palette,
     ) -> Self {
-        let room = total_len - mid_len;
-        let (clean_left, clean_right) = Self::center(room);
+        let room = total_len - left_len - right_len;
 
-        if clean_left > left_len && clean_right > right_len {
-            let left = clean_left - left_len;
-            let right = clean_right - right_len;
+        if room > 0 {
             Self {
-                left: Some(Bg::render(left, palette)),
-                right: Some(Bg::render(right, palette)),
-            }
-        } else if clean_left < left_len && clean_right - left_len - clean_left > right_len {
-            let diff = left_len - clean_left;
-            let right = clean_right - diff - right_len;
-
-            Self {
-                left: None,
-                right: Some(Bg::render(right, palette)),
-            }
-        } else if clean_right < right_len && clean_left - right_len - clean_right > left_len {
-            let diff = right_len - clean_right;
-            let left = clean_left - diff - left_len;
-
-            Self {
-                left: Some(Bg::render(left, palette)),
-                right: None,
+                space: Some(Bg::render(room, palette)),
             }
         } else {
             // We ran out of space
-            Self {
-                left: None,
-                right: None,
-            }
+            Self { space: None }
         }
-    }
-
-    fn center(room: usize) -> (usize, usize) {
-        let quot = room / 2;
-        let rem = room % 2;
-        (quot, quot + rem)
     }
 }
 

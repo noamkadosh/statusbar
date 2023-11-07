@@ -19,9 +19,9 @@ impl DateTime {
     // https://github.com/time-rs/time/issues/293
     // so using chrono (which is also broken here) :shrugs:
     pub fn now() -> Self {
-        // FIXME: UTC offset is always +00:00. Hardcoding TZ for now.
+        // FIXME: UTC offset is always +00:00. Hardcoding Timezone for now.
         let utc = Utc::now();
-        let offset = FixedOffset::east_opt(-7 * 3600 /* hours */).unwrap();
+        let offset = FixedOffset::east_opt(-8 * 3600 /* hours */).unwrap();
         let now = utc.with_timezone(&offset);
 
         let day_suffix = match now.day() {

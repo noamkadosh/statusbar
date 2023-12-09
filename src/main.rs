@@ -36,6 +36,7 @@ register_plugin!(State);
 impl ZellijPlugin for State {
     fn load(&mut self, _configuration: BTreeMap<String, String>) {
         set_selectable(true);
+        set_timeout(1.0);
         request_permission(&[
             PermissionType::ReadApplicationState,
             PermissionType::RunCommands,

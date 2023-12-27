@@ -18,7 +18,7 @@ impl ModeColor {
             InputMode::Resize => palette.green,
             InputMode::Scroll => palette.green,
             InputMode::Search => palette.cyan,
-            InputMode::Session => palette.red,
+            InputMode::Session => palette.white,
             InputMode::Tab => palette.magenta,
             InputMode::Tmux => palette.blue,
         };

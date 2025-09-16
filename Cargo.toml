@@ -5,8 +5,8 @@ authors = ["Noam Kadosh <noamkadosh91@gmail.com>", "Alex Fedoseev <alex@fedoseev
 edition = "2021"
 
 [dependencies]
-zellij-tile = "0.40.1"
-zellij-tile-utils = "0.40.1"
+zellij-tile = "0.43.1"
+zellij-tile-utils = "0.43.1"
 chrono = "0.4.42"
 colored = "3"
 ansi_term = "0.12.1"

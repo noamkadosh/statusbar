@@ -161,11 +161,8 @@ impl ZellijPlugin for State {
 
         blocks.append(&mut mid);
 
-        match spacer {
-            Spacer { space: Some(space) } => {
-                blocks.push(space);
-            }
-            Spacer { space: None } => {}
+        if let Spacer { space: Some(space) } = spacer {
+            blocks.push(space);
         }
 
         blocks.append(&mut session.blocks);
